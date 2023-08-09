@@ -29,7 +29,7 @@ public class AccountDTO {
         return balance;
     }
 
-    public LocalDateTime getCreationDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 }
