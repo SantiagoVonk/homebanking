@@ -1,10 +1,13 @@
 package com.mindhub.homebanking.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mindhub.homebanking.dtos.TransactionDTO;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Account {
@@ -20,13 +23,17 @@ public class Account {
     @JoinColumn(name = "client_id")
     private Client client;
 
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
+    private Set<Transaction> transactions = new HashSet<>();
+
     public Account () {}
 
-    public Account(String number, Double balance, LocalDateTime creationDate, Client client) {
+    public Account(String number, Double balance, LocalDateTime creationDate, Client client, Transaction transaction) {
         this.number = number;
         this.balance = balance;
         this.creationDate = creationDate;
         this.client = client;
+        this.transactions = transactions;
     }
 
     public Long getId() {
@@ -66,14 +73,21 @@ public class Account {
         this.client = client;
     }
 
-    @Override
-    public String toString() {
-        return "Account{" +
-                "id=" + id +
-                ", number='" + number + '\'' +
-                ", balance=" + balance +
-                ", creationDate=" + creationDate +
-                ", client=" + client +
-                '}';
+    public Set<Transaction> getTransactions() {
+        return transactions;
     }
+
+    //public Set<Account> getAccounts() {
+    //        return accounts;
+    //    }
+    public void addTransaction(Transaction transaction) {
+        transaction.setAccount(this);
+        transactions.add(transaction);
+    }
+
+    //public void addAccounts(Account account) {
+    //        account.setClient(this);
+    //        accounts.add(account);
+    //    }
+
 }
