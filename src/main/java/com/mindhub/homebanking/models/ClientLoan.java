@@ -25,7 +25,7 @@ public class ClientLoan {
     public ClientLoan() {
     }
 
-    public ClientLoan(int payments, double amounts, Client client, Loan loan) {
+    public ClientLoan(int payments, double amounts, Client client, Loan loan) { // borrar client y loan //////////
         this.payments = payments;
         this.amounts = amounts;
         this.client = client;

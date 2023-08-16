@@ -23,7 +23,8 @@ public class MindhubBrothersApplication {
 								  AccountRepository accountRepository,
 								  TransactionRepository transactionRepository,
 								  LoanRepository loanRepository,
-								  ClientLoanRepository clientLoanRepository) {
+								  ClientLoanRepository clientLoanRepository,
+								  CardRepository cardRepository) {
 		return args -> {
 			Client client = new Client();
 			client.setFirstName("Melba");
@@ -95,6 +96,28 @@ public class MindhubBrothersApplication {
 			ClientLoan clientLoan1 = new ClientLoan(12, 50000.0, client, loan1);
 			clientLoanRepository.save(clientLoan1);
 
+			//(String cardholder, CardType cardType, CardColor cardColor, String number, Short cvv, LocalDate fromDate, LocalDate thruDate)
+			Card card = new Card();
+			card.setClient(client);
+			card.setCardholder(client.getFirstName() + " " + client.getLastName());
+			card.setCardType(CardType.DEBIT);
+			card.setCardColor(CardColor.GOLD);
+			card.setNumber("1234123412341234");
+			card.setCvv(987);
+			card.setFromDate(LocalDate.now());
+			card.setThruDate(LocalDate.now().plusYears(5));
+			cardRepository.save(card);
+
+			Card card1 = new Card();
+			card1.setClient(client);
+			card1.setCardholder(client.getFirstName() + " " + client.getLastName());
+			card1.setCardType(CardType.CREDIT);
+			card1.setCardColor(CardColor.TITANIUM);
+			card1.setNumber("4321432143214321");
+			card1.setCvv(963);
+			card1.setFromDate(LocalDate.now());
+			card1.setThruDate(LocalDate.now().plusYears(5));
+			cardRepository.save(card1);
 		};
 	}
 }

@@ -1,7 +1,5 @@
 package com.mindhub.homebanking.dtos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 
 import java.util.Set;
@@ -11,16 +9,19 @@ public class ClientDTO {
 
     private Long id;
     private String firstName, lastName, email;
-    private Set<AccountDTO> accountDTO;
+    private Set<AccountDTO> accounts;
 
     private Set<ClientLoanDTO> loans;
+
+    private Set<CardDTO> cards;
     public ClientDTO(Client client) {
         id = client.getId();
         firstName = client.getFirstName();
         lastName = client.getLastName();
         email = client.getEmail();
-        accountDTO = client.getAccounts().stream().map(element -> new AccountDTO(element)).collect(Collectors.toSet());
+        accounts = client.getAccounts().stream().map(element -> new AccountDTO(element)).collect(Collectors.toSet());
         loans = client.getClientLoans().stream().map(element -> new ClientLoanDTO(element)).collect(Collectors.toSet());
+        cards = client.getCards().stream().map(card -> new CardDTO(card)).collect(Collectors.toSet());
     }
 
     public Long getId() {
@@ -40,9 +41,13 @@ public class ClientDTO {
     }
 
     public Set<AccountDTO> getAccounts() {
-        return accountDTO;
+        return accounts;
     }
     public Set<ClientLoanDTO> getLoans() {
         return loans;
+    }
+
+    public Set<CardDTO> getCards() {
+        return cards;
     }
 }

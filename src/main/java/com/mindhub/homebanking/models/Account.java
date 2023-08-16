@@ -1,7 +1,6 @@
 package com.mindhub.homebanking.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mindhub.homebanking.dtos.TransactionDTO;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -28,12 +27,10 @@ public class Account {
 
     public Account () {}
 
-    public Account(String number, Double balance, LocalDateTime creationDate, Client client, Transaction transaction) {
+    public Account(String number, Double balance, LocalDateTime creationDate) {
         this.number = number;
         this.balance = balance;
         this.creationDate = creationDate;
-        this.client = client;
-        this.transactions = transactions;
     }
 
     public Long getId() {
@@ -77,17 +74,9 @@ public class Account {
         return transactions;
     }
 
-    //public Set<Account> getAccounts() {
-    //        return accounts;
-    //    }
     public void addTransaction(Transaction transaction) {
         transaction.setAccount(this);
         transactions.add(transaction);
     }
-
-    //public void addAccounts(Account account) {
-    //        account.setClient(this);
-    //        accounts.add(account);
-    //    }
 
 }
