@@ -15,7 +15,7 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name= "native", strategy = "native")
     private Long id;
-    private String firstName, lastName, email;
+    private String firstName, lastName, email, password;
 
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     private Set<Account> accounts = new HashSet<>();
@@ -25,13 +25,17 @@ public class Client {
 
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     private Set<Card> cards = new HashSet<>();
+
+    private String rolClient;
     public Client() {
     }
 
-    public Client(String firstName, String lastName, String email) {
+    public Client(String firstName, String lastName, String email, String password, String rolClient) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.password = password;
+        this.rolClient = rolClient;
     }
 
     public Long getId() {
@@ -60,6 +64,14 @@ public class Client {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Set<Account> getAccounts() {
@@ -92,5 +104,13 @@ public class Client {
     public void addCards(Card card) {
         card.setClient(this);
         cards.add(card);
+    }
+
+    public String getRolClient() {
+        return rolClient;
+    }
+
+    public void setRolClient(String rolClient) {
+        this.rolClient = rolClient;
     }
 }
