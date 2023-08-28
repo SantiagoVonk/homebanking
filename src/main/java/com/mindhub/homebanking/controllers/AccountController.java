@@ -1,13 +1,18 @@
 package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.dtos.AccountDTO;
+import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.models.Account;
+import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
+import com.mindhub.homebanking.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +20,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class AccountController  {
 
+    @Autowired
+    ClientRepository clientRepository;
     @Autowired
     private AccountRepository accountRepository;
 
@@ -27,4 +34,28 @@ public class AccountController  {
     public AccountDTO getAccount(@PathVariable Long id) {
        return new AccountDTO(accountRepository.findById(id).orElse(null));
     }
+
+    @RequestMapping(value = "/clients/current/accounts", method = RequestMethod.POST)
+    public ResponseEntity<Object> getCurrentAccount(Authentication authentication) {
+        if (authentication.getName() != null) {
+        ClientDTO clientDTO = new ClientDTO(clientRepository.findByEmail(authentication.getName()));
+        String email = clientDTO.getEmail();
+        Client client = clientRepository.findByEmail(email);
+        if (client.getAccounts().size() <= 3) {
+            Account account = new Account();
+            account.setClient(client);
+            account.setBalance(0.0);
+            account.setCreationDate(LocalDateTime.now());
+            //modificar a aleatorio y sin repeticion
+            account.setNumber("VIN00" + client.getId());
+                accountRepository.save(account);
+                return new  ResponseEntity<>(HttpStatus.CREATED);
+            }else {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        }
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+    //return client.getAccounts();
+    /*return new ResponseEntity<>(HttpStatus.CREATED);*/
 }

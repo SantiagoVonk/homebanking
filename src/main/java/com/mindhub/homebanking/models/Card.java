@@ -104,7 +104,6 @@ public class Card {
         this.thruDate = thruDate;
     }
 
-    @JsonIgnore
     public Client getClient() {
         return client;
     }

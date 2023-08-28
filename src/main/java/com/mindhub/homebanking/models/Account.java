@@ -61,7 +61,6 @@ public class Account {
         this.creationDate = creationDate;
     }
 
-    @JsonIgnore
     public Client getClient() {
         return client;
     }

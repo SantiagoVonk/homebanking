@@ -88,12 +88,10 @@ public class Client {
         clientLoans.add(clientLoan);
     }
 
-    @JsonIgnore
     public List<Loan> getLoans() {
         return clientLoans.stream().map(element -> element.getLoan()).collect(Collectors.toList());
     }
 
-    @JsonIgnore
     public Set<ClientLoan> getClientLoans() {
         return clientLoans;
     }

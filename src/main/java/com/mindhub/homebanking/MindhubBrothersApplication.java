@@ -43,7 +43,7 @@ public class MindhubBrothersApplication {
 			clientRepository.save(client1);
 
 			// create client 2
-			Client client2 = new Client("Lionel", "Messi", "lionel@mindhub.com", passwordEncoder.encode("2222"), "ADMIN");
+			Client client2 = new Client("Lionel", "Messi", "lionel@mindhub.com", passwordEncoder.encode("2222"), "CLIENT");
 			// save client 2
 			clientRepository.save(client2);
 
