@@ -1,6 +1,7 @@
 package com.mindhub.homebanking.dtos;
 
 import com.mindhub.homebanking.models.Account;
+import com.mindhub.homebanking.utils.Utils;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -41,4 +42,5 @@ public class AccountDTO {
     public Set<TransactionDTO> getTransactions() {
         return transactions;
     }
+
 }

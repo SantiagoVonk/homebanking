@@ -32,20 +32,19 @@ public class MindhubBrothersApplication {
 								  CardRepository cardRepository) {
 
 		return args -> {
+			// create client Admin
+			Client admin = new Client("Admin", "Admin", "admin@admin.com", passwordEncoder.encode("0000"), ClientRol.ADMIN);
+			clientRepository.save(admin);
+
 			// create client 1
 			Client client1 = new Client();
 			client1.setFirstName("Melba");
 			client1.setLastName("Morel");
 			client1.setEmail("melba@mindhub.com");
 			client1.setPassword(passwordEncoder.encode("1111"));
-			client1.setRolClient("CLIENT");
+			client1.setClientRol(ClientRol.CLIENT);
 			// save client 1
 			clientRepository.save(client1);
-
-			// create client 2
-			Client client2 = new Client("Lionel", "Messi", "lionel@mindhub.com", passwordEncoder.encode("2222"), "CLIENT");
-			// save client 2
-			clientRepository.save(client2);
 
 			// create account 1
 			Account account1 = new Account();
@@ -63,6 +62,10 @@ public class MindhubBrothersApplication {
 			account2.setClient(client1);
 			accountRepository.save(account2);
 
+			// create client 2
+			Client client2 = new Client("Lionel", "Messi", "lionel@mindhub.com", passwordEncoder.encode("2222"), ClientRol.CLIENT);
+			// save client 2
+			clientRepository.save(client2);
 
 			Account account3 = new Account();
 			account3.setNumber("VIN003");

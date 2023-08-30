@@ -15,19 +15,19 @@ import javax.servlet.http.HttpSession;
 @EnableWebSecurity
 @Configuration
 public class WebAuthorization extends WebSecurityConfigurerAdapter {
-
+                                        //cambiar luego la clase deprecada
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //http.authorizeRequests().antMatchers("/**").permitAll();
+        http.authorizeRequests().antMatchers("/**").permitAll();
         http.authorizeRequests().antMatchers("/web/index.html", "/web/js/index.js", "/api/login", "/web/css/style.css", "/web/img/mindhub.jpg", "/web/css/Mindhub-logo.png", "/web/css/favicon.ico").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/clients").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/clients", "/api/login").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/clients/current/accounts", "/api/clients/current/cards").hasAuthority("CLIENT");
         http.authorizeRequests().antMatchers("/h2/console", "/rest").hasAuthority("ADMIN");
         http.authorizeRequests().antMatchers("/manager.html", "/manager.js", "/web/account.html",
-                                                        "/web/accounts.html", "/web/cards.html", "/api/clients", "/web/js/**",
+                                                        "/web/accounts.html", "/web/cards.html", "/web/js/**",
                                                         "/web/css/**", "/web/img/**").hasAuthority("CLIENT");
 
-        //http.authorizeRequests().antMatchers("/api/**").denyAll(); //agregar denyAll() y controlar porque no muestra los datos
+        http.authorizeRequests().antMatchers("/api/**").denyAll();
 
         http.formLogin().usernameParameter("email").passwordParameter("password").loginPage("/api/login");
 

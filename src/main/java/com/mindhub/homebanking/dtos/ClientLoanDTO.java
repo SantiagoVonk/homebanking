@@ -13,13 +13,11 @@ public class ClientLoanDTO {
     private Client client;
     private Loan loan;
 
-    public ClientLoanDTO(ClientLoan clientLoan) { // clien nombre prestamo e id del prestamo debe devolver
+    public ClientLoanDTO(ClientLoan clientLoan) {
         this.id = clientLoan.getId();
         this.loanId = clientLoan.getLoan().getId();
         this.payments = clientLoan.getPayments();
         this.amount = clientLoan.getAmounts();
-        //this.client = clientLoan.getClient(); // borrar
-        //this.loan = clientLoan.getLoan(); // borrar
     }
 
     public Long getId() {
