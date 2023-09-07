@@ -25,11 +25,9 @@ public class ClientLoan {
     public ClientLoan() {
     }
 
-    public ClientLoan(int payments, double amounts, Client client, Loan loan) { // borrar client y loan //////////
+    public ClientLoan(int payments, double amounts) {
         this.payments = payments;
         this.amounts = amounts;
-        this.client = client;
-        this.loan = loan;
     }
 
     public Long getId() {

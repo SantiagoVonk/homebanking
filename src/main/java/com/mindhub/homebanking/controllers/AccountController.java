@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -36,10 +37,9 @@ public class AccountController extends Utils{
     }
 
     @GetMapping("/clients/current/accounts")
-    public List<AccountDTO> getCurrentAccounts(Authentication authentication) {
+    public Set<AccountDTO> getCurrentAccounts(Authentication authentication) {
         ClientDTO clientDTO = new ClientDTO(clientRepository.findByEmail(authentication.getName()));
-        return clientDTO.getAccounts().stream().collect(Collectors.toList());
-        //return accountRepository.findAll().stream().map(account -> new AccountDTO(account)).collect(Collectors.toList());
+        return clientDTO.getAccounts();
     }
 
 
@@ -56,8 +56,15 @@ public class AccountController extends Utils{
         account.setClient(client);
         account.setBalance(0.0);
         account.setCreationDate(LocalDateTime.now());
-        //numero cuenta aleatorio (ok) y sin repeticion falta
-        account.setNumber("VIN00-" + getRandomNumber(99999999, 1));
+
+        int max = 99999999;
+        int min = 1;
+        account.setNumber("VIN00-" + getRandomNumber(max, min));
+        if (accountRepository.findByNumber(account.getNumber()) != null) {
+            while (accountRepository.findByNumber(account.getNumber()) != null) {
+                account.setNumber("VIN00-" + getRandomNumber(max,min));
+            }
+        }
         accountRepository.save(account);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

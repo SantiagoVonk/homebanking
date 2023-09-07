@@ -23,12 +23,11 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(Double amount, String description, LocalDateTime date, TransactionType type, Account account) {
+    public Transaction(Double amount, String description, LocalDateTime date, TransactionType type) {
         this.amount = amount;
         this.description = description;
         this.date = date;
         this.type = type;
-        this.account = account;
     }
 
     public Long getId() {

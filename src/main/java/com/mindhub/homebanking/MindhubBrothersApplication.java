@@ -37,56 +37,48 @@ public class MindhubBrothersApplication {
 			clientRepository.save(admin);
 
 			// create client 1
-			Client client1 = new Client();
-			client1.setFirstName("Melba");
-			client1.setLastName("Morel");
-			client1.setEmail("melba@mindhub.com");
-			client1.setPassword(passwordEncoder.encode("1111"));
-			client1.setClientRol(ClientRol.CLIENT);
+			Client client1 = new Client("Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("1111"), ClientRol.CLIENT );
 			// save client 1
 			clientRepository.save(client1);
 
 			// create account 1
-			Account account1 = new Account();
-			account1.setNumber("VIN001");
-			account1.setCreationDate(LocalDateTime.now());
-			account1.setBalance(5000.0);
+			Account account1 = new Account("VIN001", 5000.0, LocalDateTime.now());
 			account1.setClient(client1);
 			// save account 1
 			accountRepository.save(account1);
 
-			Account account2 = new Account();
-			account2.setNumber("VIN002");
-			account2.setCreationDate(LocalDateTime.now().plusDays(1));
-			account2.setBalance(7500.0);
+			Account account2 = new Account("VIN002", 7500.0, LocalDateTime.now().plusDays(1));
 			account2.setClient(client1);
 			accountRepository.save(account2);
+
+			Transaction transaction1 = new Transaction(1000.0, "Salary", LocalDateTime.now(), TransactionType.CREDIT);
+			transaction1.setAccount(account1);
+			transactionRepository.save(transaction1);
+
+			Transaction transaction2 = new Transaction(-50.0, "Dinner", LocalDateTime.now(), TransactionType.DEBIT );
+			transaction2.setAccount(account1);
+			transactionRepository.save(transaction2);
+
+			Transaction transaction3 = new Transaction(1517.5, "Others", LocalDateTime.now(), TransactionType.CREDIT);
+			transaction3.setAccount(account2);
+			transactionRepository.save(transaction3);
+
+
 
 			// create client 2
 			Client client2 = new Client("Lionel", "Messi", "lionel@mindhub.com", passwordEncoder.encode("2222"), ClientRol.CLIENT);
 			// save client 2
 			clientRepository.save(client2);
 
-			Account account3 = new Account();
-			account3.setNumber("VIN003");
-			account3.setCreationDate(LocalDateTime.now());
-			account3.setBalance(120000.0);
-			account3.setClient(client2);
+			Account account3 = new Account("VIN003", 12000.0, LocalDateTime.now()); // create account 3
+			account3.setClient(client2); // set client2 in account 3
 			accountRepository.save(account3);
 
-			Transaction transaction = new Transaction();
-			transaction.setAmount(1000.0);
-			transaction.setDescription("Salary");
-			transaction.setDate(LocalDateTime.now());
-			transaction.setType(TransactionType.CREDIT);
-			transaction.setAccount(account1);
-			transactionRepository.save(transaction);
 
-			Transaction transaction1 = new Transaction(-50.0, "Dinner", LocalDateTime.now(), TransactionType.DEBIT, account1 );
-			transactionRepository.save(transaction1);
 
-			Transaction transaction2 = new Transaction(1517.5, "Others", LocalDateTime.now(), TransactionType.CREDIT, account2);
-			transactionRepository.save(transaction2);
+
+
+
 
 			Loan loan1 = new Loan();
 			loan1.setName("mortgageLoan");
@@ -107,7 +99,9 @@ public class MindhubBrothersApplication {
 			clientLoan.setLoan(loan1);
 			clientLoanRepository.save(clientLoan);
 
-			ClientLoan clientLoan1 = new ClientLoan(12, 50000.0, client1, loan2);
+			ClientLoan clientLoan1 = new ClientLoan(12, 50000.0);
+			clientLoan.setClient(client1);
+			clientLoan.setLoan(loan2);
 			clientLoanRepository.save(clientLoan1);
 
 			//(String cardholder, CardType cardType, CardColor cardColor, String number, Short cvv, LocalDate fromDate, LocalDate thruDate)

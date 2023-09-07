@@ -55,13 +55,15 @@ public class TransactionController {
         }
         // continuar con las verificaciones
 
-        Transaction transactionOriginAccount = new Transaction(amount, description +" to "+ toAccountNumber, LocalDateTime.now(), TransactionType.DEBIT, accountRepository.findByNumber(fromAccountNumber));
+        Transaction transactionOriginAccount = new Transaction(amount, description +" to "+ toAccountNumber, LocalDateTime.now(), TransactionType.DEBIT);
+        transactionOriginAccount.setAccount(accountRepository.findByNumber(fromAccountNumber));
         accountRepository.findByNumber(fromAccountNumber).setBalance(accountRepository.findByNumber(fromAccountNumber).getBalance() - amount);
         accountRepository.findByNumber(fromAccountNumber).addTransaction(transactionOriginAccount);
         transactionRepository.save(transactionOriginAccount);
         accountRepository.save(accountRepository.findByNumber(fromAccountNumber));
 
-        Transaction transactionTargetAccount = new Transaction(amount, description +" from "+ fromAccountNumber, LocalDateTime.now(), TransactionType.CREDIT, accountRepository.findByNumber(toAccountNumber));
+        Transaction transactionTargetAccount = new Transaction(amount, description +" from "+ fromAccountNumber, LocalDateTime.now(), TransactionType.CREDIT);
+        transactionTargetAccount.setAccount(accountRepository.findByNumber(toAccountNumber));
         accountRepository.findByNumber(toAccountNumber).setBalance(accountRepository.findByNumber(toAccountNumber).getBalance() + amount);
         accountRepository.findByNumber(toAccountNumber).addTransaction(transactionTargetAccount);
         transactionRepository.save(transactionTargetAccount);

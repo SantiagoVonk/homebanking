@@ -29,6 +29,8 @@ public class Client {
     public Client() {
     }
 
+    //importante: no utilizar los metodos constructores para agregar las propiedades relacionales
+    // ej: accounts, cards, clientLoans, para eso utilizar los metodos creados especificamente (addAccounts, addCards, addClientLoans)
     public Client(String firstName, String lastName, String email, String password, ClientRol clientRol) {
         this.firstName = firstName;
         this.lastName = lastName;

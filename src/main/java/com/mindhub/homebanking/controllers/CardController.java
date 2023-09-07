@@ -32,10 +32,16 @@ public class CardController extends Utils {
 
     @PostMapping("/clients/current/cards")
     public ResponseEntity<Object> addCard(Authentication authentication, @RequestParam CardColor cardColor, @RequestParam CardType cardType) {
+
         if (authentication.getName() == null) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        //falta controlar si cardType y cardColor no estan vacios, que no me deja :\
+        if ( cardType != CardType.DEBIT && cardType != CardType.CREDIT) {
+            return new ResponseEntity<>("Card type does not exist", HttpStatus.FORBIDDEN);
+        }
+        if (cardColor != CardColor.SILVER && cardColor != CardColor.GOLD && cardColor != CardColor.TITANIUM) {
+            return new ResponseEntity<>("Card color does not exist", HttpStatus.FORBIDDEN);
+        }
 
         Client client = clientRepository.findByEmail(authentication.getName());
         Set clientCardType = client.getCards().stream().filter(card -> card.getCardType().equals(cardType)).collect(Collectors.toSet());
@@ -50,10 +56,7 @@ public class CardController extends Utils {
         card.setThruDate(LocalDate.now().plusYears(5));
         card.setCardholder(client.getFirstName() + " " + client.getLastName());
         card.setCvv(getRandomNumber(999, 100));
-        card.setNumber( getRandomNumber(9999,1000) + "-" +
-                        getRandomNumber(9999,1000) + "-" +
-                        getRandomNumber(9999,1000) + "-" +
-                        getRandomNumber(9999,1000));
+        card.setNumber(getRandomNumberCard());
         clientRepository.save(client);
         cardRepository.save(card);
         return new ResponseEntity<>(HttpStatus.CREATED);
