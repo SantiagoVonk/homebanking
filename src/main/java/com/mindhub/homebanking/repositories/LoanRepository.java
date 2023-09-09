@@ -11,5 +11,7 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
 
     Optional<Loan> findById(Long id);
 
+
+
     //Client findByEmail(String email);
 }

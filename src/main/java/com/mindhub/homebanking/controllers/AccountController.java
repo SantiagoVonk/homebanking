@@ -1,12 +1,11 @@
 package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.dtos.AccountDTO;
-import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
-import com.mindhub.homebanking.repositories.AccountRepository;
-import com.mindhub.homebanking.repositories.ClientRepository;
-import com.mindhub.homebanking.utils.Utils;
+import com.mindhub.homebanking.services.AccountService;
+import com.mindhub.homebanking.services.ClientService;
+import com.mindhub.homebanking.utils.UtilsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,31 +14,33 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
-public class AccountController extends Utils{
+public class AccountController {
 
     @Autowired
-    ClientRepository clientRepository;
+    private AccountService accountService;
+
     @Autowired
-    private AccountRepository accountRepository;
+    private ClientService clientService;
+
+    @Autowired
+    private UtilsService utilsService;
 
     @RequestMapping("/accounts")
     public List<AccountDTO> getAccounts() {
-        return accountRepository.findAll().stream().map(account -> new AccountDTO(account)).collect(Collectors.toList());
+        return accountService.getAccountsDTO();
     }
 
     @RequestMapping("/accounts/{id}")
     public AccountDTO getAccount(@PathVariable Long id) {
-       return new AccountDTO(accountRepository.findById(id).orElse(null));
+       return accountService.getAccount(id);
     }
 
     @GetMapping("/clients/current/accounts")
     public Set<AccountDTO> getCurrentAccounts(Authentication authentication) {
-        ClientDTO clientDTO = new ClientDTO(clientRepository.findByEmail(authentication.getName()));
-        return clientDTO.getAccounts();
+        return accountService.getCurrentAccounts(authentication);
     }
 
 
@@ -48,7 +49,7 @@ public class AccountController extends Utils{
         if (authentication.getName() == null) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        Client client = clientRepository.findByEmail(authentication.getName());
+        Client client = clientService.findByEmail(authentication.getName());
         if (client.getAccounts().size() >= 3) {
             return new ResponseEntity<>("Sorry, You have 3 Accounts", HttpStatus.FORBIDDEN);
         }
@@ -59,13 +60,13 @@ public class AccountController extends Utils{
 
         int max = 99999999;
         int min = 1;
-        account.setNumber("VIN00-" + getRandomNumber(max, min));
-        if (accountRepository.findByNumber(account.getNumber()) != null) {
-            while (accountRepository.findByNumber(account.getNumber()) != null) {
-                account.setNumber("VIN00-" + getRandomNumber(max,min));
+        account.setNumber("VIN00-" + utilsService.getRandomNumber(max, min));
+        if (accountService.findByNumber(account.getNumber()) != null) {
+            while (accountService.findByNumber(account.getNumber()) != null) {
+                account.setNumber("VIN00-" + utilsService.getRandomNumber(max,min));
             }
         }
-        accountRepository.save(account);
+        accountService.saveAccount(account);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

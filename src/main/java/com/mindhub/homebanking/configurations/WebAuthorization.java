@@ -22,8 +22,8 @@ public class WebAuthorization extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/web/index.html", "/web/js/index.js", "/api/login", "/web/css/style.css", "/web/img/mindhub.jpg", "/web/css/Mindhub-logo.png", "/web/css/favicon.ico").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/clients", "/api/login").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/clients/current/accounts", "/api/clients/current/cards", "/api/transactions").hasAuthority("CLIENT");
-        http.authorizeRequests().antMatchers("/h2/console", "/rest", "/manager.html", "/manager.js", "/web/accounts.html", "/web/account.html").hasAuthority("ADMIN");
-        http.authorizeRequests().antMatchers(  "/web/cards.html", "/web/js/**", "/web/css/**", "/web/img/**", "/web/transfers.html", "/api/logout", "/api/loans").hasAuthority("CLIENT");
+        http.authorizeRequests().antMatchers("/h2/console", "/rest", "/manager.html", "/manager.js", "/web/accounts.html", "/web/account.html", "/api/clients/current/cards", "/clients/cards", "/api/loans/{id}", "/api/transactions").hasAuthority("ADMIN");
+        http.authorizeRequests().antMatchers(  "/web/cards.html", "/web/js/**", "/web/css/**", "/web/img/**", "/web/transfers.html", "/api/logout", "/api/loans", "/api/clients/current/cards").hasAuthority("CLIENT");
 
        // http.authorizeRequests().antMatchers("/api/**").denyAll();
 

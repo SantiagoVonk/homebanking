@@ -2,6 +2,8 @@ package com.mindhub.homebanking;
 
 import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.*;
+import com.mindhub.homebanking.services.AccountService;
+import com.mindhub.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -24,8 +26,8 @@ public class MindhubBrothersApplication {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	@Bean
-	public CommandLineRunner init(ClientRepository clientRepository,
-								  AccountRepository accountRepository,
+	public CommandLineRunner init(ClientService clientService,
+								  AccountService accountService,
 								  TransactionRepository transactionRepository,
 								  LoanRepository loanRepository,
 								  ClientLoanRepository clientLoanRepository,
@@ -34,22 +36,22 @@ public class MindhubBrothersApplication {
 		return args -> {
 			// create client Admin
 			Client admin = new Client("Admin", "Admin", "admin@admin.com", passwordEncoder.encode("0000"), ClientRol.ADMIN);
-			clientRepository.save(admin);
+			clientService.saveClient(admin);
 
 			// create client 1
 			Client client1 = new Client("Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("1111"), ClientRol.CLIENT );
 			// save client 1
-			clientRepository.save(client1);
+			clientService.saveClient(client1);
 
 			// create account 1
 			Account account1 = new Account("VIN001", 5000.0, LocalDateTime.now());
 			account1.setClient(client1);
 			// save account 1
-			accountRepository.save(account1);
+			accountService.saveAccount(account1);
 
 			Account account2 = new Account("VIN002", 7500.0, LocalDateTime.now().plusDays(1));
 			account2.setClient(client1);
-			accountRepository.save(account2);
+			accountService.saveAccount(account2);
 
 			Transaction transaction1 = new Transaction(1000.0, "Salary", LocalDateTime.now(), TransactionType.CREDIT);
 			transaction1.setAccount(account1);
@@ -68,16 +70,11 @@ public class MindhubBrothersApplication {
 			// create client 2
 			Client client2 = new Client("Lionel", "Messi", "lionel@mindhub.com", passwordEncoder.encode("2222"), ClientRol.CLIENT);
 			// save client 2
-			clientRepository.save(client2);
+			clientService.saveClient(client2);
 
 			Account account3 = new Account("VIN003", 12000.0, LocalDateTime.now()); // create account 3
 			account3.setClient(client2); // set client2 in account 3
-			accountRepository.save(account3);
-
-
-
-
-
+			accountService.saveAccount(account3);
 
 
 			Loan loan1 = new Loan();

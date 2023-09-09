@@ -18,7 +18,7 @@ public class ClientServiceImplementations implements ClientService {
     private ClientRepository clientRepository;
 
     @Override
-    public List<ClientDTO> getClients() {
+    public List<ClientDTO> getClientsDTO() {
         return clientRepository.findAll().stream().map(ClientDTO::new).collect(Collectors.toList());
     }
 
@@ -29,11 +29,16 @@ public class ClientServiceImplementations implements ClientService {
 
     @Override
     public ClientDTO getCurrentClientDTO(Authentication authentication) {
-        return null;
+        return new ClientDTO(clientRepository.findByEmail(authentication.getName()));
+    }
+
+    @Override
+    public Client findByEmail(String email) {
+        return clientRepository.findByEmail(email);
     }
 
     @Override
     public void saveClient(Client client) {
-
+        clientRepository.save(client);
     }
 }

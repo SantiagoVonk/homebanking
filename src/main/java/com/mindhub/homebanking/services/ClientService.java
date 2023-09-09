@@ -9,11 +9,15 @@ import java.util.List;
 
 public interface ClientService {
 
-    List<ClientDTO> getClients();
+    List<ClientDTO> getClientsDTO();
 
     ClientDTO getClient(@PathVariable Long id);
 
     ClientDTO getCurrentClientDTO(Authentication authentication);
 
+    Client findByEmail(String email);
+
     void saveClient(Client client);
+
+
 }
