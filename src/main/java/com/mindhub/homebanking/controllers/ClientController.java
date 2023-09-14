@@ -77,13 +77,10 @@ public class ClientController {
         account.setClient(client);
         account.setBalance(0.0);
         account.setCreationDate(LocalDateTime.now());
-        //numero cuenta aleatorio (ok) y sin repeticion falta
         account.setNumber("VIN00-" + utilsService.getRandomNumber(99999999, 1));
         clientService.saveClient(client);
         accountRepository.save(account);
         return new ResponseEntity<>(HttpStatus.CREATED);
-
-
 
     }
 

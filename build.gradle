@@ -26,6 +26,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	//runtimeOnly 'com.h2database:h2'
 	implementation 'org.postgresql:postgresql'
+	//Con esto ya los servicios se configuran para que al recibir una solicitud con la cabecera: Accept: application/xml
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

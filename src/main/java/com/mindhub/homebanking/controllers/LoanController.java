@@ -48,14 +48,14 @@ public class LoanController {
     @PostMapping("/loans")
     public ResponseEntity<Object> getLoan(@RequestBody LoanApplicationDTO loanApplicationDTO, Authentication authentication) {
         if (authentication.getName() == null || loanApplicationDTO == null) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Please log in again", HttpStatus.FORBIDDEN);
         }
         Client client = clientService.findByEmail(authentication.getName());
         Account account = accountService.findByNumber(loanApplicationDTO.getToAccountNumber());
         Double amountLoan = loanApplicationDTO.getAmount() + (loanApplicationDTO.getAmount() * 0.2);
         Loan loan = loanService.findById(loanApplicationDTO.getLoanId());
 
-        if (loanApplicationDTO.getAmount() == 0 || loanApplicationDTO.getPayments() == 00) {
+        if ((loanApplicationDTO.getAmount() == 0.0 || loanApplicationDTO.getAmount() < 0.0) || (loanApplicationDTO.getPayments() == 0.0 || loanApplicationDTO.getPayments() < 0.0)) {
             return new ResponseEntity<>( "Amount or Payments Value = 0",HttpStatus.FORBIDDEN);
         }
         if (loanService.findById(loanApplicationDTO.getLoanId()) == null) {
@@ -83,7 +83,5 @@ public class LoanController {
         accountService.saveAccount(account);
         clientLoanRepository.save(clientLoan);
         return new ResponseEntity<>(HttpStatus.CREATED);
-
-
     }
 }

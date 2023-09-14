@@ -87,6 +87,5 @@ public class TransactionController {
         accountService.saveAccount(accountService.findByNumber(toAccountNumber));
 
         return new ResponseEntity<>("Transaction created", HttpStatus.CREATED);
-
     }
 }
